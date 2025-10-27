@@ -45,7 +45,7 @@ codigoo.remove('^GSPC')
 codigoo.remove('^IXIC')
 for cc,c in enumerate(codigoo):
     if c == 'JEPI' or c=='BTC-USD' or c=='ETH-USD' or c=='USDT-USD':
-        valor = preços['Close'][c][-1]*dolar[-1]
+        valor = preços['Close'][c][-1]*dolar.iloc[-1]
         valor_hoje_em_reais = preços['Close'][c].iloc[-1] * dolar[-1]
         valor_ontem_em_reais = preços['Close'][c].iloc[-2] * dolar[-2]
         valorizaçao = (valor_hoje_em_reais / valor_ontem_em_reais) - 1
@@ -238,3 +238,4 @@ with st.sidebar.expander('Caixa'):
         st.write("Caixa")
     with col2:
         st.write(f'{Caixa/carteira:.2%}') 
+
