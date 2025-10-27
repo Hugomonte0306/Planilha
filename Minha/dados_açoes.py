@@ -19,7 +19,7 @@ def cor_valorizacao(valor):
         cor = 'red'
     return f'color: {cor}'
 
-lista_geral = pd.read_csv("planilha.csv",sep=";")
+lista_geral = pd.read_csv("Minha/planilha.csv",sep=";")
 print(lista_geral['codigo'])
 codigo = list(lista_geral['codigo'])
 codigo.remove('CAIXA')
@@ -237,4 +237,5 @@ with st.sidebar.expander('Caixa'):
     with col1:
         st.write("Caixa")
     with col2:
+
         st.write(f'{Caixa/carteira:.2%}') 
