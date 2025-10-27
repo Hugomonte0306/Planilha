@@ -5,8 +5,8 @@ import locale
 import plotly.express as px
 
 Caixa = 7000
-dolar_df = yf.download('USDBRL=X', period="5d", interval="1d")
-dolar = dolar_df['Close']
+dolar = yf.download('BRL=X',period="5d",interval="1d")['Close']['BRL=X']
+
 def cor_valorizacao(valor):
     """
     Retorna a cor 'green' para valores positivos, 'red' para negativos,
@@ -19,7 +19,7 @@ def cor_valorizacao(valor):
         cor = 'red'
     return f'color: {cor}'
 
-lista_geral = pd.read_csv("Minha/planilha.csv",sep=";")
+lista_geral = pd.read_csv("planilha.csv",sep=";")
 print(lista_geral['codigo'])
 codigo = list(lista_geral['codigo'])
 codigo.remove('CAIXA')
@@ -45,17 +45,17 @@ codigoo.remove('^GSPC')
 codigoo.remove('^IXIC')
 for cc,c in enumerate(codigoo):
     if c == 'JEPI' or c=='BTC-USD' or c=='ETH-USD' or c=='USDT-USD':
-        valor = preços['Close'][c][-1]*dolar.iloc[-1]
-        valor_hoje_em_reais = preços['Close'][c].iloc[-1] * dolar[-1]
-        valor_ontem_em_reais = preços['Close'][c].iloc[-2] * dolar[-2]
+        valor = preços['Close'][c][-1]*dolar[-1]
+        valor_hoje_em_reais = preços['Close'][c][-1] * dolar[-1]
+        valor_ontem_em_reais = preços['Close'][c][-2] * dolar[-2]
         valorizaçao = (valor_hoje_em_reais / valor_ontem_em_reais) - 1
         if c == 'JEPI':
             qnt = (f'{lista_geral['qnt'][cc]:.0f}')
         else:
             qnt = (f'{lista_geral['qnt'][cc]:.4f}')
     else: 
-        valor = preços['Close'][c].iloc[-1] 
-        valorizaçao = valor / preços['Close'][c].iloc[-2] - 1
+        valor = preços['Close'][c][-1] 
+        valorizaçao = valor / preços['Close'][c][-2] - 1
         qnt = (f'{lista_geral['qnt'][cc]:.0f}')
     biblioteca = {'açao':c,'valor':valor,'qnt':qnt,'valorizaçao':valorizaçao}
     lista_planilha.append(biblioteca)
@@ -68,20 +68,20 @@ for c in lista_planilha:
     carteira = carteira + c['valor'] * float(c['qnt'])
 for cc,c in enumerate(codigoo):
     if c == 'JEPI' or c=='BTC-USD' or c=='ETH-USD' or c=='USDT-USD':
-        valor = preços['Close'][c].iloc[-2]*float(lista_geral['qnt'][cc])*dolar[-2]
+        valor = preços['Close'][c][-2]*float(lista_geral['qnt'][cc])*dolar[-2]
         carteira_ontem = carteira_ontem + valor 
     else:
-        valor = preços['Close'][c].iloc[-2]*float(lista_geral['qnt'][cc])
+        valor = preços['Close'][c][-2]*float(lista_geral['qnt'][cc])
         carteira_ontem = carteira_ontem + valor
 carteira_real = str(locale.currency(carteira, grouping=True))
 valorizaçao = (carteira/carteira_ontem - 1)*100
 lucro = str(locale.currency(carteira-carteira_ontem, grouping=True))
-ibov = preços['Close']['^BVSP'].iloc[-1]
-sep = preços['Close']['^GSPC'].iloc[-1]
-nas = preços['Close']['^IXIC'].iloc[-1] 
-ibov_val = (ibov/preços['Close']['^BVSP'].iloc[-2]-1)*100
-sep_val = (sep/preços['Close']['^GSPC'].iloc[-2]-1)*100
-nas_val = (nas/preços['Close']['^IXIC'].iloc[-2]-1)*100
+ibov = preços['Close']['^BVSP'][-1]
+sep = preços['Close']['^GSPC'][-1]
+nas = preços['Close']['^IXIC'][-1] 
+ibov_val = (ibov/preços['Close']['^BVSP'][-2]-1)*100
+sep_val = (sep/preços['Close']['^GSPC'][-2]-1)*100
+nas_val = (nas/preços['Close']['^IXIC'][-2]-1)*100
 
 botao2 = []
 valor_por_açao = []
@@ -238,4 +238,3 @@ with st.sidebar.expander('Caixa'):
         st.write("Caixa")
     with col2:
         st.write(f'{Caixa/carteira:.2%}') 
-
