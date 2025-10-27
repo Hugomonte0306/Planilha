@@ -5,7 +5,8 @@ import locale
 import plotly.express as px
 
 Caixa = 7000
-dolar = yf.download('BRL=X',period="5d",interval="1d")['Close']['BRL=X']
+dolar_df = yf.download('USDBRL=X', period="5d", interval="1d")
+dolar = dolar_df['Close']
 
 def cor_valorizacao(valor):
     """
@@ -239,3 +240,4 @@ with st.sidebar.expander('Caixa'):
     with col2:
 
         st.write(f'{Caixa/carteira:.2%}') 
+
